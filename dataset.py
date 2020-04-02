@@ -25,31 +25,15 @@ class CVPRDataset(Dataset):
         if self.phase == 'train':
             img = cv2.imread('./CVPR_dataset/train/images/'+self.df_train.Name[idx])
             mask = cv2.imread('./CVPR_dataset/train/masks/'+self.df_train.Name[idx])
-            label = np.asarray(self.df_train.iloc[idx, 2:]).astype('int').argmax()
-            
-            try:
-                shape = img.shape
-            except:
-                print("EXCEPTION RAISED! Path of Train Val Image", self.df.Name[idx])
-            
         else:
             img = cv2.imread('./CVPR_dataset/val/images/'+self.df_val.Name[idx])
             mask = cv2.imread('./CVPR_dataset/val/masks/'+self.df_val.Name[idx])
-            label = np.asarray(self.df_val.iloc[idx, 2:]).argmax()
-#             label = label.reshape(1,)
-#             label = label.argmax()
-            try:
-                shape = img.shape
-            except:
-                print("EXCEPTION RAISED! Path of Image", self.path_val[idx])
-#         print(img.shape)
-#         img = img.reshape(256, 256, 1)
         augmented = self.transforms(image=img, mask=mask)
         img = augmented['image']
         mask = augmented['mask']
 #         print(mask.shape)
         mask = mask[0].permute(2, 0, 1)
-        return img, mask, label
+        return img, mask
 
     def __len__(self):
         if self.phase == 'train':
@@ -63,28 +47,8 @@ def get_transforms(phase, crop_type=0, size=256):
         list_transforms.extend([
              aug.Flip(),
              aug.RandomRotate90()
-#              aug.Cutout(num_holes=4, p=0.5),
-#              aug.OneOf([
-#                  aug.RandomContrast(),
-#                  aug.RandomGamma(),
-#                  aug.RandomBrightness(),
-#                  ], p=1),
-
-#              aug.ShiftScaleRotate(rotate_limit=90),
-#              aug.OneOf([
-#                     aug.GaussNoise(p=.35),
-#                     ], p=.5),
             ])
-        if crop_type==0:
-            list_transforms.extend([
-                CropNonEmptyMaskIfExists(size, size),
-            ])
-
-        elif crop_type==1:
-            list_transforms.extend([
-                RandomCrop(size, size, p=1.0),
-            ])
-
+        
     list_transforms.extend(
         [
             ToTensor(),
