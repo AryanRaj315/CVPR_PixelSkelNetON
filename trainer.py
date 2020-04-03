@@ -16,7 +16,6 @@ import torch.nn as nn
 from torch.nn import functional as F
 import torch.backends.cudnn as cudnn
 import pandas as pd
-import tifffile as tiff
 import torch.optim as optim
 import random
 import sys
@@ -157,10 +156,9 @@ class Trainer(object):
         masks = targets.to(self.device)
 #         masks.resize_((masks.shape[0],1,256, 256))
         labels = labels.to(self.device)
-#         print(images.shape)
+        print(images.shape, masks.shape, labels.shape)
 #         images = torch.cat((images, images, images), 1)
         outputs, preds = self.net(images.type(torch.cuda.FloatTensor))
-#         print(outputs.shape, masks.shape, preds.shape)
         cls_loss = self.loss_classification(preds, labels)
         seg_loss = self.criterion(outputs, masks)
         return cls_loss, seg_loss, outputs, preds
