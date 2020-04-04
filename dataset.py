@@ -43,7 +43,7 @@ class CVPRDataset(Dataset):
         augmented = self.transforms(image=img, mask=mask)
         img = augmented[0]
         mask = augmented[1]
-        print(img.shape, mask.shape)
+#         print(img.shape, mask.shape)
 #         mask = mask[0].permute(2, 0, 1)
         return img, mask, label
 
