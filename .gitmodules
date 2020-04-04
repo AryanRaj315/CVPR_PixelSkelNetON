@@ -1,3 +1,6 @@
 [submodule "segmentation_models.pytorch"]
 	path = segmentation_models.pytorch
 	url = https://github.com/qubvel/segmentation_models.pytorch.git
+[submodule "EfficientNet-PyTorch"]
+	path = segmentation_models.pytorch/segmentation_models_pytorch/encoders/EfficientNet-PyTorch
+	url = https://github.com/lukemelas/EfficientNet-PyTorch.git
